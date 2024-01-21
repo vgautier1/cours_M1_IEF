@@ -22,11 +22,11 @@
 - library(lubridate) # Traitement des dates
 - library(xlsx)      # Importation Excel
 
-**Installation du package *pcalg***
-install.packages("BiocManager")
-BiocManager::install("graph")
-BiocManager::install("RBGL")
-BiocManager::install("Rgraphviz")
+**Installation du package *pcalg***  
+- install.packages("BiocManager")  
+- BiocManager::install("graph")  
+- BiocManager::install("RBGL")  
+- BiocManager::install("Rgraphviz")  
 
 ***Code pays***
 cnt = c('NZL','FJI','TON','AUS','CAN','DOM','JAM','CRI','GTM','MEX',
