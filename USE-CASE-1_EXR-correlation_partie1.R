@@ -66,8 +66,6 @@ cnt = c('NZL','FJI','TON','AUS','CAN','DOM','JAM','CRI','GTM','MEX',
         'NGA') # classement par niveau de dev puis région
 
 
-
-# --- Mode d'imporation numéro 1: API TAC Datalab
 # Fonction taux de croissance
 growth_rate <- function(x,l=12, start_date=c(1999,1), freq=12){
   if (any(class(x)==c("xts"))){
@@ -80,6 +78,8 @@ growth_rate <- function(x,l=12, start_date=c(1999,1), freq=12){
   return(y)
 }
 
+
+# --- Mode d'imporation numéro 1: API TAC Datalab
 dataset = xts()
 
 for (c in cnt){
