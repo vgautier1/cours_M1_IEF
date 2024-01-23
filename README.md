@@ -39,3 +39,17 @@ cnt = c('NZL','FJI','TON','AUS','CAN','DOM','JAM','CRI','GTM','MEX',
         'NGA') # classement par niveau de dev puis région
 
 
+dataset = xts()
+
+for (c in cnt){
+  exr_cnt = taceconomics::getdata(paste0("IFS/ENDA_XDC_USD_RATE_M/", c, "?start_date=1999-01-01&frequency=M'"))
+  exr_cnt = growth_rate(exr_cnt)
+ #exr_cnt = diff(log(exr_cnt), lag=12)
+
+  dataset = cbind(dataset, exr_cnt)
+}
+
+colnames(dataset) = cnt
+dataset = data.frame(dataset)
+
+
