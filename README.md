@@ -53,6 +53,7 @@ colnames(dataset) = cnt
 dataset = data.frame(dataset)
 
 
+**Taux de croissance**
 growth_rate <- function(x,l=12, start_date=c(1999,1), freq=12){
   if (any(class(x)==c("xts"))){
     y = 100*(x/stats::lag(x,l)-1)
@@ -63,5 +64,42 @@ growth_rate <- function(x,l=12, start_date=c(1999,1), freq=12){
   colnames(y) = colnames(x)
   return(y)
 }
+
+#- Importation excel
+#https://data.imf.org/?sk=4c514d48-b6ba-49ed-8ab9-52b0c1a0179b&sId=-1
+dataset_imf = read.xlsx('USE-CASE-1_EXR_IFS.xlsx', 1)
+
+# - Mise en forme du dataset
+# Ordre alphabétique des codes ISO
+dataset_imf = dataset_imf[order(dataset_imf$ISO), ]
+
+# Suppression des colonnes inutiles
+columns_to_remove = c("Country.Name", "Country.Code", "Indicator.Name", "Indicator.Code", "Attribute", "Base.Year")
+dataset_imf = dataset_imf[, !(names(dataset_imf) %in% columns_to_remove)]
+
+# Suppression de la première colonne
+dataset_imf = data.frame(t(dataset_imf))
+colnames(dataset_imf) = dataset_imf[1, ]
+dataset_imf = dataset_imf[-1, ]
+
+# Transformation des rownames en date
+start_date = as.Date("1999-01-01")
+num_date   = nrow(dataset_imf)
+monthly_dates = seq.Date(from = start_date, by = "months", length.out = num_date)
+rownames(dataset_imf) = monthly_dates
+
+# Conserver seulement les pays qui nous intéressent (liste c)
+dataset_imf = dataset_imf[, names(dataset_imf) %in% cnt]
+dataset_imf = dataset_imf[,cnt] #dans l'ordre du vecteur "cnt"
+
+# Colonne en type numérique
+str(dataset_imf)
+dataset_imf = mutate_all(dataset_imf, as.numeric)
+
+# Passage en taux de croissance, lag=12
+#dataset_imf = apply(dataset_imf, 2, function(x) diff(log(x), lag=12))
+dataset = apply(dataset_imf, 2, function(x) growth_rate(x))
+dataset = as.data.frame(dataset)
+rownames(dataset) = rownames(dataset_imf)[13:nrow(dataset_imf)]
 
 
