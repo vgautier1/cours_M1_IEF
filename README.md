@@ -53,3 +53,15 @@ colnames(dataset) = cnt
 dataset = data.frame(dataset)
 
 
+growth_rate <- function(x,l=12, start_date=c(1999,1), freq=12){
+  if (any(class(x)==c("xts"))){
+    y = 100*(x/stats::lag(x,l)-1)
+  } else {
+    x = ts(x, start=start_date, freq=freq)
+    y = 100*(x/stats::lag(x,-l)-1)
+  }
+  colnames(y) = colnames(x)
+  return(y)
+}
+
+
