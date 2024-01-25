@@ -23,7 +23,8 @@ library(tidyr)     # Traitement des données
 library(dplyr)     # Traitement des données
 library(ggplot2)   # Graphiques
 library(lubridate) # Traitement des dates
-library(xlsx)      # Importation Excel
+library(xlsx)      # Importation Excel alternative 1
+library(readxl)    # Importation Excel alternative 2
 #library(urca)     # Test racine unitaire
 #library(vars)     # Modèles VAR
 #library(forecast) # Prévisions
@@ -65,7 +66,6 @@ cnt = c('NZL','FJI','TON','AUS','CAN','DOM','JAM','CRI','GTM','MEX',
         'KEN','MDG','MOZ','RWA','UGA','AGO','ZAF','GHA','GMB','LBR',
         'NGA') # classement par niveau de dev puis région
 
-
 # Fonction taux de croissance
 growth_rate <- function(x,l=12, start_date=c(1999,1), freq=12){
   if (any(class(x)==c("xts"))){
@@ -77,7 +77,6 @@ growth_rate <- function(x,l=12, start_date=c(1999,1), freq=12){
   colnames(y) = colnames(x)
   return(y)
 }
-
 
 # --- Mode d'imporation numéro 1: API TAC Datalab
 dataset = xts()
@@ -94,43 +93,44 @@ colnames(dataset) = cnt
 dataset = data.frame(dataset)
 
 
-# --- Mode d'imporation numéro 2: IMF excel
-#- Importation excel
-#https://data.imf.org/?sk=4c514d48-b6ba-49ed-8ab9-52b0c1a0179b&sId=-1
-dataset_imf = read.xlsx('USE-CASE-1_EXR_IFS.xlsx', 1)
-
-# - Mise en forme du dataset
-# Ordre alphabétique des codes ISO
-dataset_imf = dataset_imf[order(dataset_imf$ISO), ]
-
-# Suppression des colonnes inutiles
-columns_to_remove = c("Country.Name", "Country.Code", "Indicator.Name", "Indicator.Code", "Attribute", "Base.Year")
-dataset_imf = dataset_imf[, !(names(dataset_imf) %in% columns_to_remove)]
-
-# Suppression de la première colonne
-dataset_imf = data.frame(t(dataset_imf))
-colnames(dataset_imf) = dataset_imf[1, ]
-dataset_imf = dataset_imf[-1, ]
-
-# Transformation des rownames en date
-start_date = as.Date("1999-01-01")
-num_date   = nrow(dataset_imf)
-monthly_dates = seq.Date(from = start_date, by = "months", length.out = num_date)
-rownames(dataset_imf) = monthly_dates
-
-# Conserver seulement les pays qui nous intéressent (liste c)
-dataset_imf = dataset_imf[, names(dataset_imf) %in% cnt]
-dataset_imf = dataset_imf[,cnt] #dans l'ordre du vecteur "cnt"
-
-# Colonne en type numérique
-str(dataset_imf)
-dataset_imf = mutate_all(dataset_imf, as.numeric)
-
-# Passage en taux de croissance, lag=12
-#dataset_imf = apply(dataset_imf, 2, function(x) diff(log(x), lag=12))
-dataset = apply(dataset_imf, 2, function(x) growth_rate(x))
-dataset = as.data.frame(dataset)
-rownames(dataset) = rownames(dataset_imf)[13:nrow(dataset_imf)]
+# # --- Mode d'imporation numéro 2: IMF excel
+# #- Importation excel
+# #https://data.imf.org/?sk=4c514d48-b6ba-49ed-8ab9-52b0c1a0179b&sId=-1
+# #dataset_imf = read.xlsx('USE-CASE-1_EXR_IFS.xlsx', 1)               #library(xlsx)
+# dataset_imf  = data.frame(read_excel('USE-CASE-1_EXR_IFS.xlsx', 1)) #library(readxl))
+# 
+# # - Mise en forme du dataset
+# # Ordre alphabétique des codes ISO
+# # dataset_imf = dataset_imf[order(dataset_imf$ISO), ]
+# 
+# # Suppression des colonnes inutiles
+# columns_to_remove = c("Country.Name", "Country.Code", "Indicator.Name", "Indicator.Code", "Attribute", "Base.Year")
+# dataset_imf = dataset_imf[, !(names(dataset_imf) %in% columns_to_remove)]
+# 
+# # Suppression de la première colonne
+# dataset_imf = data.frame(t(dataset_imf))
+# colnames(dataset_imf) = dataset_imf[1, ]
+# dataset_imf = dataset_imf[-1, ]
+# 
+# # Transformation des rownames en date
+# start_date = as.Date("1999-01-01")
+# num_date   = nrow(dataset_imf)
+# monthly_dates = seq.Date(from = start_date, by = "months", length.out = num_date)
+# rownames(dataset_imf) = monthly_dates
+# 
+# # Conserver seulement les pays qui nous intéressent (liste c)
+# dataset_imf = dataset_imf[, names(dataset_imf) %in% cnt]
+# dataset_imf = dataset_imf[,cnt] #dans l'ordre du vecteur "cnt"
+# 
+# # Colonne en type numérique
+# str(dataset_imf)
+# dataset_imf = mutate_all(dataset_imf, as.numeric)
+# 
+# # Passage en taux de croissance, lag=12
+# #dataset_imf = apply(dataset_imf, 2, function(x) diff(log(x), lag=12))
+# dataset = apply(dataset_imf, 2, function(x) growth_rate(x))
+# dataset = as.data.frame(dataset)
+# rownames(dataset) = rownames(dataset_imf)[13:nrow(dataset_imf)]
 
 
 # --- Traitement des données
