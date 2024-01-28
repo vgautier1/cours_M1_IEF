@@ -37,8 +37,8 @@ library(readxl)    # Importation Excel alternative 2
 # - Si importation des données depuis le datalab
 # https://github.com/taceconomics/taceconomics-r
 library(taceconomics)
-#taceconomics.apikey("YOUR API KEY")
-taceconomics.apikey(Sys.getenv("TACECONOMICS_APIKEY"))
+taceconomics.apikey("YOUR API KEY")
+#taceconomics.apikey(Sys.getenv("TACECONOMICS_APIKEY"))
 
 # - Fixer la graine
 set.seed(123)
