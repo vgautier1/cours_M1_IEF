@@ -11,7 +11,8 @@
 	- Graphiques impliquant la somme des corrélations absolues et les crises: quel constat? (même chose avec seulement les corrélations positives et seulement négatives).
 
 
-**CAS PRATIQUE 1: POLYGONE DE RISQUES**
+
+**CAS PRATIQUE 2: POLYGONE DE RISQUES**
 
 1) Définir 6 piliers afin de construire un polygone de risques. Chaque pilier doit au minimum comporter 2 indicateurs.
 
