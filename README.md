@@ -4,7 +4,7 @@
 
 2) Datation des crises de change à l’aide du critère de Frankel et Rose.
 
-	- Définir à l’aide d’un graphique les périodes de crise majeures.
+	- Définir à l’aide d’un graphique les périodes de crises majeures.
  
 3) Confrontation des corrélations et des périodes de crises majeures.
 
