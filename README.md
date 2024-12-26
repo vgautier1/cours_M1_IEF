@@ -18,7 +18,7 @@
 
 2) Récupération des données pour au moins deux pays émergents parmi: Inde, Indonésie, Brésil, Mexique, Turquie, Russie et Afrique du Sud.
 
-3) Mettre les données dans le bon sens (augmentation de l’indicateur  augmentation du risque).
+3) Mettre les données dans le bon sens (augmentation de l’indicateur <=> augmentation du risque).
 
 4) Mise à l’échelle des données.
 
