@@ -11,6 +11,10 @@
 	- Graphiques impliquant la somme des corrélations absolues et les crises: quel constat? (même chose avec seulement les corrélations positives et seulement négatives).
 
 
+# install.packages("devtools")
+# library(devtools)
+# install_github("taceconomics/taceconomics-r")
+
 
 
 
